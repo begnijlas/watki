@@ -1,7 +1,4 @@
-package src;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 class Towar {
 	private int kod;
@@ -18,22 +15,16 @@ class Towar {
 }
 
 class Pojemnik {
-	private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-	private Lock rl = rwl.readLock();
-	private Lock wl = rwl.writeLock();
 	private LinkedList<Towar> polka;
 	private int max;
 	private boolean pusty = true;
-	
 	
 	public Pojemnik(int max){
 		polka = new LinkedList<Towar>();
 		this.max = max;
 	}
 
-	 Towar get() {
-		rl.lock();
-		try{
+	synchronized Towar get() {
 		if(pusty){
 			try {
 				System.out.println ("Konsument: czekam na produkcjê...");
@@ -46,14 +37,9 @@ class Pojemnik {
 		if (polka.size() == 0) pusty = true;
 		notify();
 		return towar;
-		}finally{
-		rl.unlock();
-		}
-		
 	}
 
-	void put(Towar towar) {
-		wl.lock();
+	synchronized void put(Towar towar) {
 		if( !pusty ) {
 			try {
 				System.out.println ("Producent: czekam na konsumpcjê...");
@@ -65,7 +51,6 @@ class Pojemnik {
 		System.out.println("Produkcja: " + towar);
 		if( polka.size() == max) pusty = false;
 		notify();
-		wl.unlock();
 	}
 }
 
