@@ -47,7 +47,7 @@ class Poczekalnia {
 		try {
 			poczekalnia.remove(0);
 			System.out.println("Klient strzyzony, stan poczekalni: " + poczekalnia);
-			Thread.sleep((int) (Math.random() * (5000 - 2000) + 2000));
+			Thread.sleep((int) (Math.random() * 5000));
 
 		} catch (InterruptedException e) {
 		}
@@ -94,7 +94,7 @@ class Klient implements Runnable {
 		try {
 			while (true) {
 				poczekalnia.usiadz();
-				Thread.sleep((int) (Math.random() * (5000 - 2000 + 1000) + 2000));
+				Thread.sleep((int) (Math.random() * 500));
 			}
 		} catch (InterruptedException ex) {
 		}
