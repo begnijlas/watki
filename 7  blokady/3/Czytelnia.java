@@ -8,20 +8,15 @@ class Pisarz extends Thread {
 		ksiazka = m;
 	}
 	
-	public boolean obliczPrawdopodobienstwo(){
-		int liczba = ((int) Math.random() * 100 )-7;
-		if(liczba < 93) return false;
-		else
-		return true;
-	}
+	
 
 	public void run() {
 		int x = 0;
-		while (true) {
-			if(obliczPrawdopodobienstwo()) System.out.println("dopisuje : " + x + " nie zdalismy i piszemy jutro");
+		while (x<10) {
+			System.out.println("dopisuje : " + x + " ");
 			ksiazka.napisz( x + " " );
 			try {
-				this.sleep((int)Math.random()*5000);
+				Thread.sleep(((int)Math.random()*15000-2000)+2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -41,15 +36,17 @@ class Czytelnik extends Thread {
 	}
 
 	public void run() {
-		while (true) {
+		int x=0;
+		while (x<10) {
 			System.out.print("Odczytuje : \t\t");
 			ksiazka.odczytaj();
 			try {
-				this.sleep((int)Math.random()*5000);
+				Thread.sleep(((int)Math.random()*15000-2000)+2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			x++;
 		}
 	}
 }
@@ -63,15 +60,28 @@ class Zasob {
 	private String pismo = "poczatek ";
 
 	public void napisz(String tekst) {
+		
 		wl.lock();
 		pismo += tekst;
 		wl.unlock();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void odczytaj() {
 		rl.lock();
 		System.out.println(pismo);
 		rl.unlock();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
